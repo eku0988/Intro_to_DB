@@ -1,5 +1,5 @@
 -- task_4.sql
--- Print full description of the table 'books' from 'alx_book_store'
+-- Print full description of the table 'books' without using DESCRIBE, EXPLAIN, or ANALYZE
 
 SELECT 
     COLUMN_NAME AS `Column`,
@@ -11,7 +11,7 @@ SELECT
 FROM 
     INFORMATION_SCHEMA.COLUMNS
 WHERE 
-    TABLE_SCHEMA = 'alx_book_store'
+    TABLE_SCHEMA = DATABASE()  -- Use the database passed to mysql command
     AND TABLE_NAME = 'books'
 ORDER BY 
     ORDINAL_POSITION;
