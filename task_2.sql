@@ -1,67 +1,83 @@
--- TASK 2: Create all tables for alx_book_store
+-- TASK 2: Create all tables for alx_book_store (ALX exact schema)
 
--- Ensure the database exists and use it
-CREATE DATABASE IF NOT EXISTS alx_book_store;
+CREATE DATABASE IF NOT EXISTS alx_book_store
+CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
 USE alx_book_store;
 
--- Drop tables if they exist (to avoid errors when re-running the script)
-DROP TABLE IF EXISTS order_details;
-DROP TABLE IF EXISTS orders;
-DROP TABLE IF EXISTS books;
-DROP TABLE IF EXISTS authors;
-DROP TABLE IF EXISTS customers;
+-- Drop tables if they exist
+DROP TABLE IF EXISTS Order_Details;
+DROP TABLE IF EXISTS Orders;
+DROP TABLE IF EXISTS Books;
+DROP TABLE IF EXISTS Authors;
+DROP TABLE IF EXISTS Customers;
 
 -- ===========================
 -- AUTHORS TABLE
 -- ===========================
-CREATE TABLE AUTHORS (
-    author_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    country VARCHAR(100)
-);
+CREATE TABLE Authors (
+    author_id INT NOT NULL AUTO_INCREMENT,
+    author_name VARCHAR(215) NOT NULL,
+    PRIMARY KEY (author_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ===========================
 -- BOOKS TABLE
 -- ===========================
-CREATE TABLE BOOKS (
-    book_id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(150) NOT NULL,
+CREATE TABLE Books (
+    book_id INT NOT NULL AUTO_INCREMENT,
+    title VARCHAR(130) NOT NULL,
     author_id INT NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    stock_quantity INT DEFAULT 0,
-    FOREIGN KEY (author_id) REFERENCES AUTHORS(author_id)
-);
+    price DOUBLE NOT NULL,
+    publication_date DATE,
+    PRIMARY KEY (book_id),
+    INDEX idx_books_author (author_id),
+    CONSTRAINT fk_books_author FOREIGN KEY (author_id) REFERENCES Authors(author_id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ===========================
 -- CUSTOMERS TABLE
 -- ===========================
-CREATE TABLE CUSTOMERS (
-    customer_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(150) UNIQUE NOT NULL,
-    address VARCHAR(255)
-);
+CREATE TABLE Customers (
+    customer_id INT NOT NULL AUTO_INCREMENT,
+    customer_name VARCHAR(215) NOT NULL,
+    email VARCHAR(215),
+    address TEXT,
+    PRIMARY KEY (customer_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ===========================
 -- ORDERS TABLE
 -- ===========================
-CREATE TABLE ORDERS (
-    order_id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE Orders (
+    order_id INT NOT NULL AUTO_INCREMENT,
     customer_id INT NOT NULL,
-    order_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    total_amount DECIMAL(10, 2) DEFAULT 0.00,
-    FOREIGN KEY (customer_id) REFERENCES CUSTOMERS(customer_id)
-);
+    order_date DATE,
+    PRIMARY KEY (order_id),
+    INDEX idx_orders_customer (customer_id),
+    CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES Customers(customer_id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ===========================
 -- ORDER_DETAILS TABLE
 -- ===========================
-CREATE TABLE ORDER_DETAILS (
-    order_detail_id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE Order_Details (
+    orderdetailid INT NOT NULL AUTO_INCREMENT,
     order_id INT NOT NULL,
     book_id INT NOT NULL,
-    quantity INT NOT NULL,
-    subtotal DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (order_id) REFERENCES ORDERS(order_id),
-    FOREIGN KEY (book_id) REFERENCES BOOKS(book_id)
-);
+    quantity DOUBLE NOT NULL,
+    PRIMARY KEY (orderdetailid),
+    INDEX idx_orderdetails_order (order_id),
+    INDEX idx_orderdetails_book (book_id),
+    CONSTRAINT fk_orderdetails_order FOREIGN KEY (order_id) REFERENCES Orders(order_id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+    CONSTRAINT fk_orderdetails_book FOREIGN KEY (book_id) REFERENCES Books(book_id)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
