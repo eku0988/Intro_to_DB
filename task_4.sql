@@ -1,4 +1,4 @@
 -- task_4.sql
--- Full description of the table 'books' without DESCRIBE, EXPLAIN, ANALYZE, or INFORMATION_SCHEMA
+-- Print the full description of the table 'books'
 
-SHOW CREATE TABLE books;
+SHOW FULL COLUMNS FROM books;
