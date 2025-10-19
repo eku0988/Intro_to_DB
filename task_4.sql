@@ -1,13 +1,14 @@
--- task_4.sql
--- Print the full description of the table 'books'
+-- Script: task_4.sql
+-- Prints the full description of the table books
+-- Database name will be passed as argument
 
 SELECT 
-    COLUMN_NAME AS 'Column',
-    COLUMN_TYPE AS 'Type',
-    IS_NULLABLE AS 'Nullable',
-    COLUMN_KEY AS 'Key',
-    COLUMN_DEFAULT AS 'Default',
-    EXTRA AS 'Extra'
+    COLUMN_NAME,
+    COLUMN_TYPE,
+    IS_NULLABLE,
+    COLUMN_KEY,
+    COLUMN_DEFAULT,
+    EXTRA
 FROM 
     INFORMATION_SCHEMA.COLUMNS
 WHERE 
