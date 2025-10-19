@@ -1,5 +1,5 @@
 -- Script: task_4.sql
--- Prints the full description of the table books
+-- Prints the full description of the table Books
 -- Database name will be passed as argument
 
 SELECT 
@@ -10,7 +10,7 @@ SELECT
     COLUMN_DEFAULT AS 'Default',
     EXTRA AS 'Extra'
 FROM 
-    information_schema.columns
+    INFORMATION_SCHEMA.COLUMNS
 WHERE 
-    table_schema = DATABASE()
-    AND table_name = 'books';
+    TABLE_SCHEMA = 'alx_book_store'
+    AND TABLE_NAME = 'Books';
